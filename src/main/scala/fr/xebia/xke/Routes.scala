@@ -7,7 +7,16 @@ import akka.http.scaladsl.server.Route
 object Routes {
 
   // TODO
-  // Améliorer cette route pour qu'elle ne réponde pong que lors d'un GET sur la route /ping
-  val routes: Route = complete("pong")
+  // Implémenter une route qui :
+  // 1. Sur le endpoint /users avec le verbe POST
+  // 2. Récupère le body de la requête (une simple string)
+  // 4. La renvoie telle quelle avec le status 201
+  // La combiner avec la route existante
+  val routes: Route =
+  path("ping") {
+    get {
+      complete("pong")
+    }
+  }
 
 }

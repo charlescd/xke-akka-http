@@ -21,7 +21,7 @@ class RoutesTest extends FunSpec
       it("should return pong") {
         Get("/ping") ~> Routes.routes ~> check {
           status should be(StatusCodes.OK)
-          responseAs[String] should include("pong")
+          responseAs[String] should be("pong")
         }
       }
 
@@ -36,6 +36,18 @@ class RoutesTest extends FunSpec
           inside(rejection) { case MethodRejection(_) => }
         }
       }
+    }
+
+    describe("POST on /users") {
+
+      it("should return the user with the status 201") {
+        val user = UUID.randomUUID().toString
+        Post("/users", user) ~> Routes.routes ~> check {
+          status should be(StatusCodes.Created)
+          responseAs[String] should be(user)
+        }
+      }
+
     }
   }
 }
