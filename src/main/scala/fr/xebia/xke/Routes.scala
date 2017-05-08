@@ -11,7 +11,7 @@ class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with Use
 
   // TODO
   // Implémenter une route pour lister tous les user.
-  // Ajouter un mécanisme pour filtrer les users par nom dans les query params.
+  // Ajouter un mécanisme pour filtrer les users par nom et par age dans les query params.
   val routes: Route =
   path("ping") {
     get {

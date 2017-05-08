@@ -105,11 +105,30 @@ class RoutesTest extends FunSpec
         }
       }
 
-      it("should return only some user when the request contains a filter") {
-        Get("/users?nom=toto") ~> routes ~> check {
+      it("should return only some user when the request contains a filter by name") {
+        Get("/users?name=toto") ~> routes ~> check {
           status should be(StatusCodes.OK)
           responseAs[List[User]] should contain theSameElementsAs List(
             User(1, "toto", 29),
+            User(3, "toto", 30)
+          )
+        }
+      }
+
+      it("should return only some user when the request contains a filter by age") {
+        Get("/users?age=30") ~> routes ~> check {
+          status should be(StatusCodes.OK)
+          responseAs[List[User]] should contain theSameElementsAs List(
+            User(2, "titi", 30),
+            User(3, "toto", 30)
+          )
+        }
+      }
+
+      it("should return only some user when the request contains both filters") {
+        Get("/users?age=30&name=toto") ~> routes ~> check {
+          status should be(StatusCodes.OK)
+          responseAs[List[User]] should contain theSameElementsAs List(
             User(3, "toto", 30)
           )
         }
