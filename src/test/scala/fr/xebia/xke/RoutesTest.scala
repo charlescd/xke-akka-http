@@ -3,13 +3,15 @@ package fr.xebia.xke
 import java.util.UUID
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.headers.{HttpEncodings, `Accept-Encoding`}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, Multipart, StatusCodes}
 import akka.http.scaladsl.server.MethodRejection
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FunSpec, Inside, Matchers}
 
 import scala.collection.mutable
+import scala.util.Random
 
 class RoutesTest extends FunSpec
   with Matchers
@@ -133,6 +135,64 @@ class RoutesTest extends FunSpec
           )
         }
       }
+    }
+
+    describe("GET on /encode-response") {
+
+      val users = mutable.ArrayBuffer[User]()
+      val routes = new Routes(users).routes
+
+      it("should encode the response if the client asked for it") {
+        Get(s"/encode-response").addHeader(`Accept-Encoding`(HttpEncodings.gzip)) ~> routes ~> check {
+          status should be(StatusCodes.OK)
+          header("Content-Encoding").map(_.value()) should be(Some("gzip"))
+        }
+      }
+
+      it("should not encode the response if the client did not asked") {
+        Get(s"/encode-response") ~> routes ~> check {
+          status should be(StatusCodes.OK)
+          responseAs[String] should be("Encoded !")
+        }
+      }
+    }
+
+    describe("PUT on /orders (fileupload)") {
+
+      val users = mutable.ArrayBuffer[User]()
+      val routes = new Routes(users).routes
+
+      it("should return the size of the file uploaded") {
+        val file = Random.nextString(Random.nextInt(1000))
+        val multipartForm =
+          Multipart.FormData(
+            Multipart.FormData.BodyPart.Strict(
+              "step-7",
+              HttpEntity(ContentTypes.`text/plain(UTF-8)`, file),
+              Map("filename" -> "test.txt"))
+          )
+
+        Put(s"/orders", multipartForm) ~> routes ~> check {
+          status should be(StatusCodes.OK)
+          responseAs[String] should be(s"${file.length}")
+        }
+      }
+
+      it("should fail when the size of the file exceed the limit") {
+        val file = Random.nextString(20000)
+        val multipartForm =
+          Multipart.FormData(
+            Multipart.FormData.BodyPart.Strict(
+              "step-7",
+              HttpEntity(ContentTypes.`text/plain(UTF-8)`, file),
+              Map("filename" -> "test.txt"))
+          )
+
+        Put(s"/orders", multipartForm) ~> routes ~> check {
+          status should be(StatusCodes.InternalServerError)
+        }
+      }
+
     }
   }
 
