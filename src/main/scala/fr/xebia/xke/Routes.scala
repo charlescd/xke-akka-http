@@ -1,16 +1,17 @@
 package fr.xebia.xke
 
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 
-//TODO
-// Penser à étendre ou importer la classe apportant le support JSON
-object Routes {
+import scala.collection.mutable
+
+class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with UserJson {
 
   // TODO
-  // Remplacer la string par une case class User avec :
-  // Un id, un nom, un age
+  // Implémenter un mécanisme pour stocker les users
+  // Utiliser la liste fournie en paramètre de la classe
   val routes: Route =
   path("ping") {
     get {
@@ -19,7 +20,7 @@ object Routes {
   } ~
     path("users") {
       post {
-        entity(as[String]) { user =>
+        entity(as[User]) { user =>
           complete(StatusCodes.Created, user)
         }
       }

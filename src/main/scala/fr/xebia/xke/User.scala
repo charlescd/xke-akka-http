@@ -1,5 +1,9 @@
 package fr.xebia.xke
 
-//TODO
-// Créer un user et les implicits nécessaires à la conversion en JSON
-case class User()
+import spray.json.DefaultJsonProtocol
+
+case class User(id: Int, name: String, age: Int)
+
+trait UserJson extends DefaultJsonProtocol {
+  implicit val userFormat = jsonFormat3(User)
+}
