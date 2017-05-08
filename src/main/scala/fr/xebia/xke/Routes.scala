@@ -21,7 +21,11 @@ class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with Use
     path("users") {
       post {
         entity(as[User]) { user =>
-          complete(StatusCodes.Created, user)
+          if (users.exists(_.id == user.id)) complete(StatusCodes.Conflict)
+          else {
+            users.append(user)
+            complete(StatusCodes.Created, user)
+          }
         }
       }
     }
