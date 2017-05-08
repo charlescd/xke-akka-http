@@ -12,6 +12,7 @@ class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with Use
   // TODO
   // Implémenter un mécanisme pour stocker les users
   // Utiliser la liste fournie en paramètre de la classe
+  // Attention : la liste ne doit contenir que des id uniques
   val routes: Route =
   path("ping") {
     get {

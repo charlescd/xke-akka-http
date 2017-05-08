@@ -61,6 +61,13 @@ class RoutesTest extends FunSpec
         }
       }
 
+      it("should return 409 when the id already exists") {
+        val user = User(1, "titi", 30)
+        Post("/users", user) ~> routes ~> check {
+          status should be(StatusCodes.Conflict)
+        }
+      }
+
     }
   }
 }
