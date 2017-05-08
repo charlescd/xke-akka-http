@@ -10,8 +10,7 @@ import scala.collection.mutable
 class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with UserJson {
 
   // TODO
-  // Implémenter une route pour lister tous les user.
-  // Ajouter un mécanisme pour filtrer les users par nom et par age dans les query params.
+  // Check the tests to see what you need to do !
   val routes: Route =
   path("ping") {
     get {
@@ -26,6 +25,13 @@ class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with Use
             users.append(user)
             complete(StatusCodes.Created, user)
           }
+        }
+      } ~ get {
+        parameters('name.?, 'age.as[Int].?) {
+          case (Some(name), Some(age)) => complete(users.filter(user => user.name == name && user.age == age).toSeq)
+          case (None, Some(age)) => complete(users.filter(_.age == age).toSeq)
+          case (Some(name), None) => complete(users.filter(_.name == name).toSeq)
+          case (None, None) => complete(users.toSeq)
         }
       }
     } ~
