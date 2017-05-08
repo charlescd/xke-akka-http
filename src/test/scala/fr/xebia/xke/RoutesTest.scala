@@ -41,10 +41,10 @@ class RoutesTest extends FunSpec
     describe("POST on /users") {
 
       it("should return the user with the status 201") {
-        val user = UUID.randomUUID().toString
+        val user = User()
         Post("/users", user) ~> Routes.routes ~> check {
           status should be(StatusCodes.Created)
-          responseAs[String] should be(user)
+          responseAs[User] should be(user)
         }
       }
 

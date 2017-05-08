@@ -1,22 +1,28 @@
 package fr.xebia.xke
 
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 
-
+//TODO
+// Penser à étendre ou importer la classe apportant le support JSON
 object Routes {
 
   // TODO
-  // Implémenter une route qui :
-  // 1. Sur le endpoint /users avec le verbe POST
-  // 2. Récupère le body de la requête (une simple string)
-  // 4. La renvoie telle quelle avec le status 201
-  // La combiner avec la route existante
+  // Remplacer la string par une case class User avec :
+  // Un id, un nom, un age
   val routes: Route =
   path("ping") {
     get {
       complete("pong")
     }
-  }
+  } ~
+    path("users") {
+      post {
+        entity(as[String]) { user =>
+          complete(StatusCodes.Created, user)
+        }
+      }
+    }
 
 }
