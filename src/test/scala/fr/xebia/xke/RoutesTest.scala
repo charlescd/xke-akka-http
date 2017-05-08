@@ -88,5 +88,33 @@ class RoutesTest extends FunSpec
         }
       }
     }
+
+    describe("GET on /users") {
+
+      val users = mutable.ArrayBuffer[User](User(1, "toto", 29), User(2, "titi", 30), User(3, "toto", 30))
+      val routes = new Routes(users).routes
+
+      it("should return all the users") {
+        Get("/users") ~> routes ~> check {
+          status should be(StatusCodes.OK)
+          responseAs[List[User]] should contain theSameElementsAs List(
+            User(1, "toto", 29),
+            User(2, "titi", 30),
+            User(3, "toto", 30)
+          )
+        }
+      }
+
+      it("should return only some user when the request contains a filter") {
+        Get("/users?nom=toto") ~> routes ~> check {
+          status should be(StatusCodes.OK)
+          responseAs[List[User]] should contain theSameElementsAs List(
+            User(1, "toto", 29),
+            User(3, "toto", 30)
+          )
+        }
+      }
+    }
   }
+
 }
