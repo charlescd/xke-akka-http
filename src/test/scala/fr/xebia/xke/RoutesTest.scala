@@ -69,5 +69,24 @@ class RoutesTest extends FunSpec
       }
 
     }
+
+    describe("GET on /users/:id") {
+
+      val users = mutable.ArrayBuffer[User](User(1, "toto", 29), User(2, "titi", 30))
+      val routes = new Routes(users).routes
+
+      it("should return the user if it exists") {
+        Get("/users/1") ~> routes ~> check {
+          status should be(StatusCodes.OK)
+          responseAs[User] should be(User(1, "toto", 29))
+        }
+      }
+
+      it("should return 404 if it does not exists") {
+        Get("/users/18") ~> routes ~> check {
+          status should be(StatusCodes.NotFound)
+        }
+      }
+    }
   }
 }
