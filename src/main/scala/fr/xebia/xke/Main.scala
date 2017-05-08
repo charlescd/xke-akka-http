@@ -1,6 +1,7 @@
 package fr.xebia.xke
 
 import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 
 object Main extends App {
@@ -9,6 +10,5 @@ object Main extends App {
 
   val routes = Routes.routes
 
-  // TODO
-  // Démarrer le server en local sur le port 8080 avec l'objet routes ci-dessus
+  Http().bindAndHandle(routes, "localhost", 8080)
 }
