@@ -10,7 +10,7 @@ import scala.collection.mutable
 class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with UserJson {
 
   // TODO
-  // Implémenter une route pour récupérer un user par id (l'id sera dans le path).
+  // Implémenter une route pour récupérer un user par id (l'id sera dans le path. ex: /users/1234).
   // La route doit renvoyer 404 si le user n'existe pas, et 200 s'il existe.
   val routes: Route =
   path("ping") {
