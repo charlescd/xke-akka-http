@@ -11,6 +11,7 @@ class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with Use
 
   // TODO
   // Implémenter une route pour récupérer un user par id (l'id sera dans le path).
+  // La route doit renvoyer 404 si le user n'existe pas, et 200 s'il existe.
   val routes: Route =
   path("ping") {
     get {
