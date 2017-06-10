@@ -10,9 +10,11 @@ import scala.collection.mutable
 class Routes(users: mutable.ArrayBuffer[User]) extends SprayJsonSupport with UserJson {
 
   // TODO
-  // Implémenter un mécanisme pour stocker les users
+  // Implémenter un mécanisme pour stocker les users créés
   // Utiliser la liste fournie en paramètre de la classe
   // Attention : la liste ne doit contenir que des id uniques
+  //
+  // Lorsque l'on tente de créer un user déjà existant, la route doit retourner 409 (CONFLICT)
   val routes: Route =
   path("ping") {
     get {
