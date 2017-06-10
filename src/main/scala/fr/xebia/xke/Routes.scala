@@ -9,7 +9,7 @@ import akka.http.scaladsl.server.Route
 object Routes {
 
   // TODO
-  // Remplacer la string par une case class User avec : un id (int), un nom (string), un age (int)
+  // Remplacer la string par la case class User
   // Utiliser le fichier User présent dans le package fr.xebia.xke
   val routes: Route =
   path("ping") {

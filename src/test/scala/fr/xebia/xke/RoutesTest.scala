@@ -7,12 +7,15 @@ import akka.http.scaladsl.server.MethodRejection
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FunSpec, Inside, Matchers}
+import User._
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 
 class RoutesTest extends FunSpec
   with Matchers
   with ScalatestRouteTest
   with MockFactory
-  with Inside {
+  with Inside
+  with SprayJsonSupport {
 
   describe("Routes") {
 
